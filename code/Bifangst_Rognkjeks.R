@@ -107,3 +107,48 @@ mod.4<-glmmadmb(Bifangst_tot ~ 1+(1|Fartøy),data=Rognkjeks_colapsed_sub,zeroInfl
 (exp(coef(mod.4)[[1]]))/mean(Rognkjeks_colapsed_sub$effort)
 AICtab(mod.1,mod.2,mod.3,mod.4)
 mod.3.mcmc<-glmmadmb(Bifangst_tot ~ 1+(1|Fartøy),data=Rognkjeks_colapsed_sub,zeroInflation=F,family="nbinom",mcmc=TRUE, mcmc.opts=mcmcControl(mcmc=2000))
+
+#####
+# Extracting data from the norwegian stat
+
+##importerer fangststatt fra fiskeridirektoratet
+setwd( "C:/Users/kim.barum/Documents/Bifangst")
+
+#leser filer 
+
+#
+#2012
+Fiskeflaaten_2012<-read.csv("Fangst etter dato_lokasjon_fartøy_2012.csv", header=T,sep=";", na.strings = "") # All trips
+
+Bunngarn_flaate_2012<-Fiskeflaaten_2012[Fiskeflaaten_2012$REDSKAP== 20 |Fiskeflaaten_2012$REDSKAP== 22,] # All trips with gillnets
+
+R_KJEKS_2012<-Bunngarn_flaate_2012[as.numeric(as.character(Bunngarn_flaate_2012$R_KJEKS))>0.035,] #make a choice of who is actually fishing, will be an approximation
+
+length(R_KJEKS_2012$FANGST_HOMR) #number of trips: 780
+
+
+#
+#2013
+Fiskeflaaten_2013<-read.csv("Fangst etter dato_lokasjon_fartøy_2013.csv", header=T,sep=";", na.strings = "")
+
+Bunngarn_flaate_2013<-Fiskeflaaten_2013[Fiskeflaaten_2013$REDSKAP== 20 |Fiskeflaaten_2013$REDSKAP== 22,]
+
+R_KJEKS_2013<-Bunngarn_flaate_2013[as.numeric(as.character(Bunngarn_flaate_2013$R_KJEKS))>0.035,] #make a choice of who is actually fishing, will be an approximation
+
+length(R_KJEKS_2013$FANGST_HOMR) #494
+
+#
+#2015
+
+Fiskeflaaten_2015<-read.csv("Fangst_dato_lokasjon_fartøy_2015.csv", header=T,sep=";", na.strings = "")
+
+Bunngarn_flaate_2015<-Fiskeflaaten_2015[Fiskeflaaten_2015$REDSKAP== 20 |Fiskeflaaten_2015$REDSKAP== 22,]
+Bunngarn_flaate_2015$R_KJEKS<-as.numeric(as.character(Bunngarn_flaate_2015$R_KJEKS))
+R_KJEKS_2015<-Bunngarn_flaate_2015[Bunngarn_flaate_2015$R_KJEKS >0.035,] #make a choice of who is actually fishing, will be an approximation
+R_KJEKS_2015<-R_KJEKS_2015[complete.cases(R_KJEKS_2015$R_KJEKS),]
+length(R_KJEKS_2015$R_KJEKS) #257
+
+
+#
+
+
